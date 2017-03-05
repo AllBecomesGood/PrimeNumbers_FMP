@@ -4,10 +4,14 @@ import static java.lang.Math.sqrt;
 /**
 Search file for TODO:
 -! figure out Unit testing http://www.vogella.com/tutorials/JUnit/article.html
-- discard even numbers except 2
-- input validation
+- input validation in function getUserInput()
 
-
+General Plan:
+- unit tests
+- prime numbers being generated (Done for now)
+- print in a pretty table (print to textfile and opo it open upon completion)
+- make code look real pretty
+- stop adding weird comments
 */
 public class Prime
 {
@@ -41,12 +45,11 @@ public class Prime
 	 * @return
 	 */
 	private int getUserInput()
-	{ //http://stackoverflow.com/questions/5287538/how-can-i-get-the-user-input-in-java
+	{
 		Scanner scanner = new Scanner(System.in);
-		System.out.println("Enter a positive Integer (1,2,3,...): ");
-		int input = scanner.nextInt();
-		// could add input validation TODO
-		while(input < 1){
+		int input = 0;
+		while(input < 1)
+		{
 			System.out.println("Enter a positive Integer (1,2,3,...): ");
 			input = scanner.nextInt();
 		}
@@ -55,15 +58,13 @@ public class Prime
 	}
 	/**
 	 * Method to compute Prime numbers. 
-	 * - TODO: exclude any even numbers except 2 right away
-	 *
+	 * TODO Refactor this it looks like crap
 	 * @param
 	 * @return
 	 */
 	private void sieveOfEratosthenes(int input)
 	{
 		// Have to estimate the highest prime of the input.
-		// http://stackoverflow.com/questions/1042717/is-there-a-way-to-find-the-approximate-value-of-the-nth-prime/1069023#1069023
 		int estimateHighestPrime;
 		if(input < 7)
 		{
@@ -71,6 +72,7 @@ public class Prime
 		}
 		else
 		{
+			// http://stackoverflow.com/questions/1042717/is-there-a-way-to-find-the-approximate-value-of-the-nth-prime/1069023#1069023
 			double in = (double)input;
 			double estimate = in*log(in) + in*log(log(in));
 			estimateHighestPrime = (int)Math.ceil(estimate);
@@ -95,7 +97,8 @@ public class Prime
 		int limit = (int)Math.ceil( sqrt(estimateHighestPrime) );
 		int currentPrime = 2; //imagine we just removed all even elements via the 2
 		int currentPrimePosition = 0; // 0=2, 1=3, 2=5...
-		System.out.print("Current Prime: ");
+		System.out.print("Generating Primes: ");
+		double computingTimeStart = System.currentTimeMillis();
 		while(currentPrime < limit)
 		{
 			//find next prime we'll divide by
@@ -109,12 +112,16 @@ public class Prime
 			// now use this prime and divide everything that follows
 			for(int a = currentPrimePosition+1; a < primeArray.length; a++)
 			{
-				if(primeArray[a] % currentPrime == 0)
+				if(primeArray[a] % currentPrime == 0) //it divides, so cant be prime
 				{
-					primeArray[a] = 0; //it divides, so cant be prime
+					primeArray[a] = 0; 
 				}
 			}
 		}
+		double computingTimeEnd = System.currentTimeMillis(); //dont know how accurate this actually is, just a plaything
+		
+		System.out.println("Printing Primes now...");
+		double printingTimeStart = System.currentTimeMillis();
 		//now only primes and 0's are left in the array
 		System.out.println("\nPrimeArray: ");
 		int counter=0;
@@ -126,12 +133,41 @@ public class Prime
 				counter++;
 			}
 		}
-		
+		double printingTimeEnd = System.currentTimeMillis();
 		System.out.println("\nArray.length: " + counter);
+		
+		printTimeTaken(computingTimeEnd, computingTimeStart, printingTimeEnd, printingTimeStart);
+		
 		
 
 
 		 
-	 }
+	}
+	/*	Method to print time taken. 
 	
+	*/
+	private void printTimeTaken(double computingTimeEnd, double computingTimeStart, double printingTimeEnd, double printingTimeStart)
+	{
+		double computeTime = computingTimeEnd - computingTimeStart;
+		if(computeTime > 5000)
+		{
+			computeTime =  computeTime/1000;
+			System.out.println("\nTook " + computeTime + " seconds to generate Primes.");
+		}
+		else
+		{
+			System.out.println("\nTook " + computeTime + " milliseconds to generate Primes.");
+		}
+		
+		double printTime = printingTimeEnd - printingTimeStart;
+		if(printTime > 5000)
+		{
+			printTime =  printTime/1000;
+			System.out.println("\nTook " + printTime + " seconds to print Primes.");
+		}
+		else
+		{
+			System.out.println("\nTook " + printTime + " milliseconds to print Primes.");
+		}
+	}
 }
