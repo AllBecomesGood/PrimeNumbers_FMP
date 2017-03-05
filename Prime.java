@@ -1,4 +1,6 @@
 import java.util.Scanner;
+import java.io.PrintWriter;
+import java.io.IOException;
 import static java.lang.Math.log;
 import static java.lang.Math.sqrt;
 /**
@@ -8,10 +10,12 @@ Search file for TODO:
 
 General Plan:
 - unit tests
-- prime numbers being generated (Done for now)
-- print in a pretty table (print to textfile and opo it open upon completion)
+- print in a pretty table (print to textfile and open it open upon completion)
+- Readme file
+-| prime numbers being generated (Done for now)
 - make code look real pretty
 - stop adding weird comments
+
 */
 public class Prime
 {
@@ -83,13 +87,14 @@ public class Prime
 		System.out.println("2mil and 1th prime is 32,452,867");
 		//System.out.println("2, 3, 5, 7, 11, 13, 17, 19"); //expecting wrong estimate for low numbers
 		
-		int[] primeArray = new int[(estimateHighestPrime/2)]; //only add odd numbers, so roughly half.
+		int[] primeCandidateArray = new int[(estimateHighestPrime/2)]; //only add odd numbers, so roughly half.
+		int[] primeFinal = new int[input];
 		// add 2 manually and disregard any even numbers after
-		primeArray[0] = 2;
+		primeCandidateArray[0] = 2;
 		int odd = 3;
-		for(int i=1; i < primeArray.length; i++)
+		for(int i=1; i < primeCandidateArray.length; i++)
 		{
-			primeArray[i] = odd;
+			primeCandidateArray[i] = odd;
 			odd = odd + 2;
 		}
 		// limit=sqrt(estimateHighestPrime)
@@ -103,18 +108,18 @@ public class Prime
 		{
 			//find next prime we'll divide by
 			currentPrimePosition += 1;
-			while(primeArray[currentPrimePosition] == 0) // not usable
+			while(primeCandidateArray[currentPrimePosition] == 0) // not usable
 			{
 				currentPrimePosition += 1; // try next
 			}
-			currentPrime = primeArray[currentPrimePosition];
+			currentPrime = primeCandidateArray[currentPrimePosition];
 			System.out.print(currentPrime + " ");
 			// now use this prime and divide everything that follows
-			for(int a = currentPrimePosition+1; a < primeArray.length; a++)
+			for(int a = currentPrimePosition+1; a < primeCandidateArray.length; a++)
 			{
-				if(primeArray[a] % currentPrime == 0) //it divides, so cant be prime
+				if(primeCandidateArray[a] % currentPrime == 0) //it divides, so cant be prime
 				{
-					primeArray[a] = 0; 
+					primeCandidateArray[a] = 0; 
 				}
 			}
 		}
@@ -125,23 +130,69 @@ public class Prime
 		//now only primes and 0's are left in the array
 		System.out.println("\nPrimeArray: ");
 		int counter=0;
-		for(int b = 0; b < primeArray.length; b++)
+		for(int b = 0; b < primeCandidateArray.length; b++)
 		{
-			if(primeArray[b] != 0 )
+			if(primeCandidateArray[b] != 0 )
 			{
-				System.out.print(primeArray[b] + " ");
+				System.out.print(primeCandidateArray[b] + " ");
 				counter++;
 			}
 		}
 		double printingTimeEnd = System.currentTimeMillis();
-		System.out.println("\nArray.length: " + counter);
+		System.out.println("\nArray.length: " + counter); //to see how many extra primes were generated
 		
 		printTimeTaken(computingTimeEnd, computingTimeStart, printingTimeEnd, printingTimeStart);
 		
 		
-
-
-		 
+		//copy from candidate to final
+		int j = 0;
+		for(int i = 0; i < primeCandidateArray.length; i++) //candiate array has more primes than fit
+		{
+			if(primeCandidateArray[i] != 0)
+			{	
+				primeFinal[j] = primeCandidateArray[i];
+				j++;
+			}
+			if(j >= input){ break; }
+		}
+		writeTableTofile(primeFinal, input);
+		
+	}
+	/* 
+	
+	*/
+	private void writeTableTofile(int[] primeArrayFinal, int amountToPrint)
+	{
+		/* 
+		| [length of last Prime] | [length: 1st * last] | [etc] | [length= lastPrime*lastPrime] |
+		*/
+		try
+		{
+			PrintWriter write = new PrintWriter("PrimeMultiTable.txt", "UTF-8");
+			int lastPrime = primeArrayFinal[(primeArrayFinal.length-1)];
+			int lengthLastPrime = String.valueOf(lastPrime).length();
+			String padding = new String(new char[lengthLastPrime]).replace("\0", " ");
+			write.print("| " + padding + " ");
+			
+			int totalColLength;
+			int currentNumLength;
+			int paddingLength;
+			for(int i = 0; i < primeArrayFinal.length; i++) 
+			{		 
+				totalColLength = String.valueOf((primeArrayFinal[i]*lastPrime)).length();
+				currentNumLength = String.valueOf(primeArrayFinal[i]).length();
+				paddingLength = totalColLength - currentNumLength;
+				padding = new String(new char[paddingLength]).replace("\0", " ");
+				write.print("| " + padding + primeArrayFinal[i] + " ");
+			}
+			write.print("|");
+			write.println("\nThe second line");
+			write.close();
+		} 
+		catch (IOException e) 
+		{
+			System.out.println("Failed to create textfile with Multiplication table.");
+		}
 	}
 	/*	Method to print time taken. 
 	
