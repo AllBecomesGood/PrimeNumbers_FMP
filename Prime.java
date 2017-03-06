@@ -19,7 +19,6 @@ General Plan:
 */
 public class Prime
 {
-	String newLine = System.lineSeparator();// not currently used
 	/**
 	 * Main Method.
 	 *
@@ -104,7 +103,7 @@ public class Prime
 		int currentPrime = 2; //imagine we just removed all even elements via the 2
 		int currentPrimePosition = 0; // 0=2, 1=3, 2=5...
 		System.out.print("Generating Primes... ");
-		System.out.print("\nDividing by: ");
+		System.out.print("\r\nDividing by: ");
 		double computingTimeStart = System.currentTimeMillis();
 		while(currentPrime < limit)
 		{
@@ -130,7 +129,7 @@ public class Prime
 		double printingTimeStart = System.currentTimeMillis();
 		//now only primes and 0's are left in the array
 		/*
-		System.out.println("\nPrimeArray: ");
+		System.out.println("\r\nPrimeArray: ");
 		int counter=0;
 		for(int b = 0; b < primeCandidateArray.length; b++)
 		{
@@ -140,7 +139,7 @@ public class Prime
 				counter++;
 			}
 		}
-		System.out.println("\nArray.length: " + counter); //to see how many extra primes were generated
+		System.out.println("\r\nArray.length: " + counter); //to see how many extra primes were generated
 		*/
 		double printingTimeEnd = System.currentTimeMillis();
 		
@@ -171,7 +170,7 @@ public class Prime
 		*/
 		//String[] paddingArray = new String[(amountToPrint+1)];
 		// revisit printf and a paddingArray
-		System.out.println("\nPrinting Primes to textfile 'PrimeMultiTable.txt' now...");
+		System.out.println("\r\nPrinting Primes to textfile 'PrimeMultiTable.txt' now...");
 		try
 		{
 			PrintWriter write = new PrintWriter("PrimeMultiTable.txt", "UTF-8");
@@ -192,7 +191,7 @@ public class Prime
 				padding 		 = new String(new char[ paddingLength ]).replace("\0", " ");
 				write.print("| " + padding + primeArrayFinal[i] + " ");
 			}
-			write.print("|\n");
+			write.print("|\r\n");
 			System.out.println("Printing " +amountToPrint+ " lines...");
 			
 			for(int a = 0; a < primeArrayFinal.length; a++)
@@ -221,11 +220,11 @@ public class Prime
 					// printing
 					write.print("| " + padding + multiplic + " ");
 				}
-				write.print("|\n");
+				write.print("|\r\n");
 			}
 			
 			
-			write.println("\nThe end.");
+			write.println("\r\nThe end.");
 			write.close();
 		} 
 		catch (IOException e) 
@@ -242,11 +241,11 @@ public class Prime
 		if(computeTime > 5000)
 		{
 			computeTime =  computeTime/1000;
-			System.out.println("\nTook " + computeTime + " seconds to generate Primes.");
+			System.out.println("\r\nTook " + computeTime + " seconds to generate Primes.");
 		}
 		else
 		{
-			System.out.println("\nTook " + computeTime + " milliseconds to generate Primes.");
+			System.out.println("\r\nTook " + computeTime + " milliseconds to generate Primes.");
 		}
 		
 		//could revisit this later
@@ -255,11 +254,11 @@ public class Prime
 		if(printTime > 5000)
 		{
 			printTime =  printTime/1000;
-			System.out.println("\nTook " + printTime + " seconds to print Primes.");
+			System.out.println("\r\nTook " + printTime + " seconds to print Primes.");
 		}
 		else
 		{
-			System.out.println("\nTook " + printTime + " milliseconds to print Primes.");
+			System.out.println("\r\nTook " + printTime + " milliseconds to print Primes.");
 		} */
 	}
 }
