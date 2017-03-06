@@ -193,11 +193,13 @@ public class Prime
 				write.print("| " + padding + primeArrayFinal[i] + " ");
 			}
 			write.print("|\n");
-			System.out.println("Printing " +amountToPrint+ " lines. Currently Printing: ");
+			System.out.println("Printing " +amountToPrint+ " lines...");
+			
 			for(int a = 0; a < primeArrayFinal.length; a++)
 			{	//if(a%100 == 0){System.out.print(a + ", ");}
 				// prime numbers leftmost column
 				totalColLength 	 = String.valueOf( (long)lastPrime ).length();
+				
 				currentNumLength = String.valueOf( (long)primeArrayFinal[a] ).length();
 				paddingLength 	 = (int)( totalColLength - currentNumLength );
 				padding 		 = new String(new char[ paddingLength ]).replace("\0", " ");
@@ -211,8 +213,10 @@ public class Prime
 					// print one line starting after leftmost column has been done
 					multiplic  		= (long)primeArrayFinal[a] * (long)primeArrayFinal[b];
 					longestValInCol = (long)primeArrayFinal[a] * (long)lastPrime;
+					System.out.println(" (long)lastPrime: "+(long)lastPrime);
 					// figure out padding
 					totalColLength   = String.valueOf( longestValInCol ).length();
+					//System.out.print("totalColLength: " + totalColLength);
 					currentNumLength = String.valueOf( multiplic ).length();
 					paddingLength    = (int)( totalColLength - currentNumLength );
 					padding 		 = new String(new char[ paddingLength ]).replace("\0", " ");
