@@ -19,6 +19,7 @@ General Plan:
 */
 public class Prime
 {
+	String newLine = System.getProperty("line.separator");// not working for some reason
 	/**
 	 * Main Method.
 	 *
@@ -39,8 +40,9 @@ public class Prime
 	private void coordinator()
 	{
 		int input = getUserInput();
-		System.out.println("coord:You entered: " + input);
-		sieveOfEratosthenes(input);
+		System.out.println("You entered: " + input);
+		int[] primeFinal = sieveOfEratosthenes(input); //Test
+		writeTableTofile(primeFinal, input);
 	}
 	/**
 	 * Method to get user input (natural number > 0).
@@ -57,7 +59,7 @@ public class Prime
 			System.out.println("Enter a positive Integer (1,2,3,...): ");
 			input = scanner.nextInt();
 		}
-		System.out.println("You entered: " + input);
+		//System.out.println("You entered: " + input);
 		return input;
 	}
 	/**
@@ -66,7 +68,7 @@ public class Prime
 	 * @param
 	 * @return
 	 */
-	private void sieveOfEratosthenes(int input)
+	public int[] sieveOfEratosthenes(int input) //public for Test
 	{
 		// Have to estimate the highest prime of the input.
 		int estimateHighestPrime;
@@ -157,8 +159,8 @@ public class Prime
 			}
 			if(j >= input){ break; }
 		}
-		writeTableTofile(primeFinal, input);
-		
+		//writeTableTofile(primeFinal, input);
+		return primeFinal; //Test
 	}
 	/* 
 	
@@ -230,6 +232,20 @@ public class Prime
 		catch (IOException e) 
 		{
 			System.out.println("Failed to create textfile with Multiplication table.");
+		}
+		if (amountToPrint < 101)
+		{
+			try{
+			ProcessBuilder pb = new ProcessBuilder("Notepad.exe", "PrimeMultiTable.txt");
+			pb.start();
+			} catch (IOException e)
+			{
+				System.out.println("Error when trying to open the textfile containing the multiplication table.");
+			}
+		}
+		else
+		{
+			System.out.println("Open textfile manually. For automatic opening try 100 Primes or less.");
 		}
 	}
 	/*	Method to print time taken. 
