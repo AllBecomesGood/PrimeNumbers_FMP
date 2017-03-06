@@ -213,7 +213,7 @@ public class Prime
 					// print one line starting after leftmost column has been done
 					multiplic  		= (long)primeArrayFinal[a] * (long)primeArrayFinal[b];
 					longestValInCol = (long)primeArrayFinal[a] * (long)lastPrime;
-					System.out.println(" (long)lastPrime: "+(long)lastPrime);
+					//System.out.println(" (long)lastPrime: "+(long)lastPrime);
 					// figure out padding
 					totalColLength   = String.valueOf( longestValInCol ).length();
 					//System.out.print("totalColLength: " + totalColLength);
