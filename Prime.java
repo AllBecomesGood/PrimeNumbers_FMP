@@ -19,6 +19,7 @@ General Plan:
 */
 public class Prime
 {
+	String newLine = System.lineSeparator();// not currently used
 	/**
 	 * Main Method.
 	 *
@@ -82,9 +83,9 @@ public class Prime
 			estimateHighestPrime = (int)Math.ceil(estimate);
 		}
 		
-		System.out.println("Estimate of highest Prime: " + estimateHighestPrime);
-		System.out.println("1mil and 1th prime is 15,485,867");
-		System.out.println("2mil and 1th prime is 32,452,867");
+		//System.out.println("Estimate of highest Prime: " + estimateHighestPrime);
+		//System.out.println("1mil and 1th prime is 15,485,867");
+		//System.out.println("2mil and 1th prime is 32,452,867");
 		//System.out.println("2, 3, 5, 7, 11, 13, 17, 19"); //expecting wrong estimate for low numbers
 		
 		int[] primeCandidateArray = new int[(estimateHighestPrime/2)]; //only add odd numbers, so roughly half.
@@ -102,7 +103,8 @@ public class Prime
 		int limit = (int)Math.ceil( sqrt(estimateHighestPrime) );
 		int currentPrime = 2; //imagine we just removed all even elements via the 2
 		int currentPrimePosition = 0; // 0=2, 1=3, 2=5...
-		System.out.print("Generating Primes: ");
+		System.out.print("Generating Primes... ");
+		System.out.print("\nDividing by: ");
 		double computingTimeStart = System.currentTimeMillis();
 		while(currentPrime < limit)
 		{
@@ -113,7 +115,7 @@ public class Prime
 				currentPrimePosition += 1; // try next
 			}
 			currentPrime = primeCandidateArray[currentPrimePosition];
-			System.out.print(currentPrime + " ");
+			System.out.print(currentPrime + ", ");
 			// now use this prime and divide everything that follows
 			for(int a = currentPrimePosition+1; a < primeCandidateArray.length; a++)
 			{
@@ -125,9 +127,9 @@ public class Prime
 		}
 		double computingTimeEnd = System.currentTimeMillis(); //dont know how accurate this actually is, just a plaything
 		
-		System.out.println("Printing Primes now...");
 		double printingTimeStart = System.currentTimeMillis();
 		//now only primes and 0's are left in the array
+		/*
 		System.out.println("\nPrimeArray: ");
 		int counter=0;
 		for(int b = 0; b < primeCandidateArray.length; b++)
@@ -138,8 +140,9 @@ public class Prime
 				counter++;
 			}
 		}
-		double printingTimeEnd = System.currentTimeMillis();
 		System.out.println("\nArray.length: " + counter); //to see how many extra primes were generated
+		*/
+		double printingTimeEnd = System.currentTimeMillis();
 		
 		printTimeTaken(computingTimeEnd, computingTimeStart, printingTimeEnd, printingTimeStart);
 		
@@ -166,27 +169,61 @@ public class Prime
 		/* 
 		| [length of last Prime] | [length: 1st * last] | [etc] | [length= lastPrime*lastPrime] |
 		*/
+		//String[] paddingArray = new String[(amountToPrint+1)];
+		// revisit printf and a paddingArray
+		System.out.println("\nPrinting Primes to textfile 'PrimeMultiTable.txt' now...");
 		try
 		{
 			PrintWriter write = new PrintWriter("PrimeMultiTable.txt", "UTF-8");
 			int lastPrime = primeArrayFinal[(primeArrayFinal.length-1)];
 			int lengthLastPrime = String.valueOf(lastPrime).length();
 			String padding = new String(new char[lengthLastPrime]).replace("\0", " ");
+			
 			write.print("| " + padding + " ");
 			
-			int totalColLength;
-			int currentNumLength;
+			long totalColLength;
+			long currentNumLength;
 			int paddingLength;
 			for(int i = 0; i < primeArrayFinal.length; i++) 
 			{		 
-				totalColLength = String.valueOf((primeArrayFinal[i]*lastPrime)).length();
-				currentNumLength = String.valueOf(primeArrayFinal[i]).length();
-				paddingLength = totalColLength - currentNumLength;
-				padding = new String(new char[paddingLength]).replace("\0", " ");
+				totalColLength   = String.valueOf( (long)primeArrayFinal[i] * (long)lastPrime).length();
+				currentNumLength = String.valueOf( (long)primeArrayFinal[i] ).length();
+				paddingLength	 = (int)( totalColLength - currentNumLength );
+				padding 		 = new String(new char[ paddingLength ]).replace("\0", " ");
 				write.print("| " + padding + primeArrayFinal[i] + " ");
 			}
-			write.print("|");
-			write.println("\nThe second line");
+			write.print("|\n");
+			System.out.println("Printing " +amountToPrint+ " lines. Currently Printing: ");
+			for(int a = 0; a < primeArrayFinal.length; a++)
+			{	//if(a%100 == 0){System.out.print(a + ", ");}
+				// prime numbers leftmost column
+				totalColLength 	 = String.valueOf( (long)lastPrime ).length();
+				currentNumLength = String.valueOf( (long)primeArrayFinal[a] ).length();
+				paddingLength 	 = (int)( totalColLength - currentNumLength );
+				padding 		 = new String(new char[ paddingLength ]).replace("\0", " ");
+				// printing
+				write.print("| " + padding + primeArrayFinal[a] + " ");
+				
+				long multiplic;
+				long longestValInCol;
+				for(int b = 0; b < primeArrayFinal.length; b++) //million times
+				{
+					// print one line starting after leftmost column has been done
+					multiplic  		= (long)primeArrayFinal[a] * (long)primeArrayFinal[b];
+					longestValInCol = (long)primeArrayFinal[a] * (long)lastPrime;
+					// figure out padding
+					totalColLength   = String.valueOf( longestValInCol ).length();
+					currentNumLength = String.valueOf( multiplic ).length();
+					paddingLength    = (int)( totalColLength - currentNumLength );
+					padding 		 = new String(new char[ paddingLength ]).replace("\0", " ");
+					// printing
+					write.print("| " + padding + multiplic + " ");
+				}
+				write.print("|\n");
+			}
+			
+			
+			write.println("\nThe end.");
 			write.close();
 		} 
 		catch (IOException e) 
@@ -210,6 +247,8 @@ public class Prime
 			System.out.println("\nTook " + computeTime + " milliseconds to generate Primes.");
 		}
 		
+		//could revisit this later
+		/* 
 		double printTime = printingTimeEnd - printingTimeStart;
 		if(printTime > 5000)
 		{
@@ -219,6 +258,6 @@ public class Prime
 		else
 		{
 			System.out.println("\nTook " + printTime + " milliseconds to print Primes.");
-		}
+		} */
 	}
 }
