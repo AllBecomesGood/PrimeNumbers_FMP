@@ -1,8 +1,14 @@
 - how to run it
 > I compiled and ran it via Windows Command Prompt using the JDK command "javac filename.java" and then run it with "java filename".
 Java Development Kit has to be installed and its path added to the PATH System Environment variable.
+> Tests can be run in the same manner except using these commands:
+compile test
+javac -cp .;junit-4.12.jar PrimeTest.java
+run test
+java -cp .;junit-4.12.jar;hamcrest-core-1.3.jar org.junit.runner.JUnitCore PrimeTest
 
-- what you’re pleased with
+
+- what youâ€™re pleased with
 > I developed two algorithms of my own for Prime generation by reading maths articles first (found out about Sieve of Eratosthenes).
 The first was crap, but finding out why was fun. The second takes ~30secs to create a million primes.
 > I never ran into a case where my variables were overflowing and it took me a little to figure it out. Java int only made it to about 6000 primes before breaking at the multiplication. Was interesting to deal with the data types.
